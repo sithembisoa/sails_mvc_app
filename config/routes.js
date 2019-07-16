@@ -21,9 +21,10 @@ module.exports.routes = {
 
   '/': { view: 'pages/homepage' },
 
-  '/posts': 'PostController.posts',
-  '/findById/:postId': 'PostController.findById',
-  '/create': 'PostController.create'
+  'GET /posts': 'PostController.posts',
+  'GET /post/:postId': 'PostController.findById',
+  'POST /post': 'PostController.create',
+  'DELETE /post/:postId': 'PostController.delete'
 
   /***************************************************************************
   *                                                                          *

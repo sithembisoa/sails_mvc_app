@@ -1,19 +1,30 @@
-// dummy data
-const post1 = {id: 1, title: 'post 1 title', body: 'this is the body of post 1'}
-const post2 = {id: 2, title: 'post 2 title', body: 'this is the body of post 2'}
-const post3 = {id: 3, title: 'post 3 title', body: 'this is the body of post 3'}
-const allPosts = [post1, post2, post3]
 
 module.exports = { 
-  posts: function(req, res) {
-    res.send(allPosts)
+  posts: async function(req, res) {
+    try {
+      const posts = await Post.find()
+      res.send(posts)
+    } catch (err) {
+      return res.serverError(err.toString())
+    }
+    
   },
 
   create: function(req, res){
-    const newPost = {id: 4, title: 'New Post', body: 'New body'}
-    allPosts.push(newPost)
+    const title = req.body.title
+    const postBody = req.body.postBody
+    
+    sails.log.debug('Title: '+title+' Body: '+postBody)
 
-    res.end()
+    Post.create({title: title, body: postBody}).exec(function(err){
+      if (err) {
+        return res.serverError(err.toString())
+      }
+      console.log("Finished creating post object")
+      return res.end()
+    })
+
+    //res.end()
   },
 
   findbyId : function (req, res) {
@@ -26,5 +37,16 @@ module.exports = {
     }else{
       res.send('Failed to find post by id: '+ postId)
     }
+  },
+
+  delete: async function(req, res){
+    try {
+      const postId = req.params.postId
+      await Post.destroy({id: postId})
+      res.send("Finished deleting post: "+ postId)
+    } catch (err) {
+      return res.serverError(err.toString())
+    }
+    
   }
 }
