@@ -1,0 +1,11 @@
+<html>
+    <body>
+        This will show a list of our posts
+        <div>
+            <% allPosts.forEach(p => { %>
+                <div><%= p.title %></div>
+                <div><%= p.body %></div>
+           <% }) %>
+        </div>
+    </body>
+</html>
