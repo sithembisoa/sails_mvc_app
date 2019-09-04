@@ -1,10 +1,47 @@
 <html>
-    <body>
+    <style>
+        .post-container{
+            background-color: white;
+            margin: 16px;
+            padding: 16px;
+        }
+    </style>
+    <script>
+        async function handleDeletePost(e){
+            console.log("delete post")
+            
+            const postId =  e.target.id
+            const url = "/post/"+postId
+            try{
+                const response = await axios.delete(url)
+                console.log(response)
+                location.reload()
+            }catch(err){
+                console.log(err.toString())
+                alert(err.toString())
+            }
+           
+        }
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <body style="background-color: rgb(235,235,235)">
         This will show a list of our posts
         <div>
+            <div class="post-container">
+                <form action="/post" method="POST">
+                    <div>Create Post</div>
+                    <input type="text" placeholder="Title" name="title">
+                    <input type="text" placeholder="Body" name="postBody">
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
             <% allPosts.forEach(p => { %>
-                <div><%= p.title %></div>
-                <div><%= p.body %></div>
+                <div class="post-container">
+                    <div><%= p.title %></div>
+                    <div><%= p.body %></div>
+                    <div><button id="<%= p.id %>" onclick="handleDeletePost(event)">Delete</button></div>
+                </div>
            <% }) %>
         </div>
     </body>
