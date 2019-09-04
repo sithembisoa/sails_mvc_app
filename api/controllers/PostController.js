@@ -27,15 +27,19 @@ module.exports = {
     //res.end()
   },
 
-  findbyId : function (req, res) {
-    const postId = req.param('postId')
+  findbyId : async function (req, res) {
+    const postId = req.params.postId
 
-    const filteredPosts = allPosts.filter(p => {return p.id == postId})
-
-    if(filteredPosts.length > 0){
-      res.send(filteredPosts[0])
-    }else{
-      res.send('Failed to find post by id: '+ postId)
+    try {
+      const allPosts = await Post.find()
+      const filteredPosts = await allPosts.filter(p => {return p.id == postId})
+      if(filteredPosts.length > 0){
+        res.send(filteredPosts[0])
+      }else{
+        res.send('Failed to find post by id: '+ postId)
+      }
+    } catch (err) {
+      return res.serverError(err.toString())
     }
   },
 
